@@ -1,0 +1,17 @@
+Here is a SQL query that names the top 10 cities within the top 10 countries by customer count:
+
+SELECT C.city, COUNT(A.customer_id) AS customer_count
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+WHERE C.country_id IN
+(SELECT C.country_id
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+GROUP BY country_id
+ORDER BY COUNT(customer_id) DESC
+LIMIT 10)
+GROUP BY C.city_id
+ORDER BY COUNT(A.customer_id) DESC
+LIMIT 10
